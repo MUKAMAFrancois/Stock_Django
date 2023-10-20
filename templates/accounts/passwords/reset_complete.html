@@ -1,0 +1,9 @@
+{% extends "common/base.html" %}
+{% block title %}Password reset{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 class="mb-5">Password set</h1>
+    <p>Your password has been set. You can 
+   <a href="{% url 'login_user'%}">log in now</a></p>
+</div>
+{% endblock %}

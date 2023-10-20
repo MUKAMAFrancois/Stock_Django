@@ -1,0 +1,54 @@
+{% extends 'common/base.html'%}
+{%load static%}
+{% load crispy_forms_tags %}
+{%block title%}Profile{% endblock title%}
+
+{% block content %}
+<style>
+    img{
+        width: 200px;
+        height: 200px;
+        
+    }
+</style>
+<body  style="background-color: #c6c6c3;">
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-md-8">
+                <table class="table table-borderless">
+                    <thead>
+                        <h3>Profile info</h3>
+                        <hr>
+                        <a href="{% url 'update_profile_info' %}" class="btn btn-success fw-bold">Edit</a>
+                    </thead>
+                    <tbody>
+
+                       <tr>
+                        <th>Email</th>
+                        <td>{{user.email}}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone Number</th>
+                        <td>{{user.profile.phone}}</td>
+                    </tr>
+                    <tr>
+                        <th>Adress</th>
+                        <td>{{user.profile.adress}}</td>
+                    </tr>
+                    <tr>
+                        <th>Username</th>
+                        <td>{{user.username}}</td>
+                    </tr>
+                  
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="col-md-4">
+                <img src="{{user.profile.image.url}}" alt="Profile Image" class="rounded-circle img-fluid">
+            </div>
+        </div>
+    </div>
+</body>
+
+{% endblock %}

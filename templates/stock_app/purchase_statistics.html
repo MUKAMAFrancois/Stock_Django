@@ -1,0 +1,146 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-1 text-center ms-1">
+    <h2>Purchases Statistics</h2>
+    <hr>
+
+    <div class="row">
+        <div class="col-md-9">
+            <h4>Categories as were Purchased</h4>
+            <canvas id="chart1" width="150" height="80"></canvas>
+        </div>
+        <div class="col-md-3">
+            <h1>Profit</h1>
+            <p>
+                later ....
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-9 mt-5">
+            <h4>Products as were Purchased</h4>
+            <canvas id="chart3" width="150" height="80"></canvas>
+        </div>
+        <div class="col-md-3 mt-5 text-center">
+            <h1>Filter</h1>
+            <form action="" method="get">
+               <p><b>From:</b> <input type="date" name="start_date" id="id_start_date"></p>
+                <p><b>To: </b><input type="date" name="end_date" id="id_end_date"></p>
+                <button type="submit"  class="btn btn-info btn-rounded">Filter</button>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- <script>
+    function updateCharts(chart1Data, chart3Data) {
+  // Update the chart1 data
+  var chart1 = document.getElementById('chart1').getContext('2d');
+  chart1.data.labels = chart1Data.map(function(item) { return item.category; });
+  chart1.data.datasets[0].data = chart1Data.map(function(item) { return item.total_qty_purchased; });
+  chart1.update();
+
+  // Update the chart3 data
+  var chart3 = document.getElementById('chart3').getContext('2d');
+  chart3.data.labels = chart3Data.map(function(item) { return item.product; });
+  chart3.data.datasets[0].data = chart3Data.map(function(item) { return item.total_qty_purchased; });
+  chart3.update();
+}
+$.ajax({
+  type: 'POST',
+  url: '/statistics/purchases/',
+  data: {
+    start_date: $('#id_start_date').val(),
+    end_date: $('#id_end_date').val()
+  },
+  success: function(response) {
+    updateCharts(response.chart1_data, response.chart3_data);
+  }
+});
+
+</script> -->
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Chart 1 Data and Configuration
+        var chart1Data = {{ chart1_data|safe }};
+        var chart1Labels = [];
+        var chart1Quantities = [];
+        
+        chart1Data.forEach(function(data) {
+            chart1Labels.push(data.category);
+            chart1Quantities.push(data.total_qty_purchased);
+        });
+
+        var ctx1 = document.getElementById('chart1').getContext('2d');
+        var chart1 = new Chart(ctx1, {
+            type: 'pie',
+            data: {
+                labels: chart1Labels,
+                datasets: [{
+                    label: 'Total Quantity Purchased',
+                    data: chart1Quantities,
+                    backgroundColor: ['rgba(0, 212, 112, 0.85)', 'rgba(4, 212, 25, 0.6)', 'rgba(245, 39, 88, 0.8)','rgba(76, 39, 245, 0.8)'],
+                    borderColor: ['rgba(54, 162, 235, 1)','rgba(76, 39, 245, 0.8)','rgba(39, 175, 197, 0.97)','rgba(255, 175, 27, 0.97)'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Chart 1 Data and Configuration
+        var chart3Data = {{ chart3_data|safe }};
+        var chart3Labels = [];
+        var chart3Quantities = [];
+        
+        chart3Data.forEach(function(data) {
+            chart3Labels.push(data.product);
+            chart3Quantities.push(data.total_qty_purchased);
+        });
+
+        var ctx3 = document.getElementById('chart3').getContext('2d');
+        var chart3 = new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: chart3Labels,
+                datasets: [{
+                    label: 'Products Purchased',
+                    data: chart3Quantities,
+                    backgroundColor: ['rgba(0, 212, 112, 0.85)', 'rgba(4, 212, 25, 0.6)', 'rgba(245, 39, 88, 0.8)','rgba(76, 39, 245, 0.8)'],
+                    borderColor: 'rgba(245, 40, 27, 0.8)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+    });
+</script>
+
+{%endblock%}
+

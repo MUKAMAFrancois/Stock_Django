@@ -1,0 +1,90 @@
+{% extends 'common/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<style>
+    .home{
+        background-color: #f2eded;
+    }
+</style>
+<div class="mx-5 pt-5 home">
+    <div class="row">
+        <p class="pb-5 col-md-6"><b>Your Records.</b> 
+            <a href="{%url 'export_csv'%}" class="btn btn-warning mt-0 mx-3">Export to CSV</a>
+            <a href="{%url 'export_pdf' %}" class="btn btn-info mt-0">Export to Pdf</a>
+        </p>
+        <form action="" method="post" class="col-md-4 pb-4">
+            {%csrf_token%}
+            <h4>Search</h4>
+            {{form|crispy}}
+            <input type="submit" value="Search" class="btn btn-outline-secondary">
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10">
+            <table id="table" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Items</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Unit(Rwf)</th>
+                        <th scope="col">Cost(Rwf)</th>
+                        <th scope="col">Remain(i)</th>
+                        <th scope="col">Profit(Rwf)</th>  <!-- New column for profit -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in records %}  <!-- Zip records and profits -->
+                    <tr>
+                        <th scope="row">
+                            <a href="{% url 'full_details' record.id %}">{{ record.id }}</a>
+                        </th>
+                        <td>{{ record.product_name }}</td>
+                        <td>{{ record.items_instock }}</td>
+                        <td>{{ record.category }}</td>
+                        <td>{{ record.unit_price }}</td>
+                        <td>{{ record.selling_price }}</td>
+                        <td>{{ record.items_instock }}</td>
+                        <td>{{record.calculate_profit }}</td>  <!-- Display the profit -->
+                        <td>
+                            <a href="{% url 'edit_record' record.pk %}" class="btn btn-secondary">Edit</a>
+                            <a href="{% url 'delete_record' record.pk %}" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+        </div>
+
+        <div class="col-md-2">
+            <a href="{%url 'add_record'%}" class="btn btn-primary btn-rounded">Add Record</a>
+            <a href="{%url 'purchase_history'%}" class="btn btn-info mt-3 btn-rounded text-light"><b>History</b></a>
+          
+        </div>
+    </div>
+
+    <div class="col-md-6 m-5">
+        <div class="pagination">
+            <span class="step-links">
+                {% if records.has_previous %}
+                    <a href="?page=1" class="btn btn-danger">&laquo; first</a>
+                    <a href="?page={{ records.previous_page_number }}" class="btn btn-danger">previous</a>
+                {% endif %}
+    
+                <span class="current-page fw-bold text-danger">
+                    Page {{records.number}} of {{records.paginator.num_pages}}.
+                </span>
+    
+                {% if records.has_next %}
+                    <a href="?page={{ records.next_page_number }}" class="btn btn-danger">next</a>
+                    <a href="?page={{ records.paginator.num_pages }}" class="btn btn-danger">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</div>
+{% endblock %}

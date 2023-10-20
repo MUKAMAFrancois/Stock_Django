@@ -1,0 +1,36 @@
+{% extends 'common/base.html'%}
+{%load static%}
+{% load crispy_forms_tags %}
+{%block title%}Register{% endblock title%}
+
+{%block content%}
+<section class="vh-100 bg-image mt-5"
+  style="background-color:#adadad;">
+  <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+    <div class="container h-100 mt-5">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+          <div class="card" style="border-radius: 15px;">
+            <div class="card-body p-5">
+              <h2 class="text-uppercase text-center mb-5">Create an account</h2>
+
+              <form method="post">
+                {%csrf_token%}
+                {{form|crispy}}
+                <input type="submit" value="Register" class="btn btn-primary my-5 fw-bold">
+
+                <div>
+                  <p class="mb-0">Already have an account? <a href="{% url 'login_user'%}" class="text-primary-50 fw-bold">Login here</a>
+                  </p>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%endblock%}

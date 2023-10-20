@@ -1,0 +1,16 @@
+<!-- stock_app/add_purchase_history.html -->
+
+{% extends 'common/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container pt-5">
+    <h3 class="pb-3">Add Purchase History</h3>
+    <form method="post" class="form">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Add Purchase</button>
+        <a href="{% url 'full_details' product.id %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
